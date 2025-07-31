@@ -2,6 +2,7 @@ import MovieCard from "../components/MovieCard";
 import { useState, useEffect } from "react";
 import "../css/Home.css";
 import { searchMovies, getPopularMovies } from "../services/api.js";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -27,6 +28,7 @@ export default function Home() {
 
   const handleSearch = async (e) => {
     e.preventDefault();
+    console.log(movies);
 
     if (!searchQuery.trim()) return;
     if (loading) return;
@@ -65,15 +67,34 @@ export default function Home() {
       {loading ? (
         <div className="loading">Loading...</div>
       ) : (
-        <div className="movies-gird">
+        <div className="movies-grid">
           {movies.map(
-            (movie) => (
+            (movie) =>
               movie.title.toLowerCase().startsWith(searchQuery) && (
-                <MovieCard movie={movie} key={movie.id} />
-              ))
+                <div className="movie-card">
+                  <Link
+                    to={"/Home/" + movie.id}
+                    state={{movie}} // Pass additional data
+                    key={movie.id}
+                    className="movie-card-link"
+                  >
+                    <MovieCard movie={movie} key={movie.id} />
+                  </Link>
+                </div>
+              )
           )}
         </div>
       )}
+      {/* {movies.map((movie) => (
+        <div>
+          <h4>
+            
+              <MovieCard movie={movie} key={movie.id} />
+              {movie.title}
+            
+          </h4>
+        </div>
+      ))} */}
     </div>
   );
 }

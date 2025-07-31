@@ -55,9 +55,24 @@
 
 .movies-grid {
   display: grid;
+  /* grid-template-columns: repeat(auto-fit, minmax((4, 1fr)); */
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1.5rem;
   padding: 1rem;
   width: 100%;
   box-sizing: border-box;
 }
+
+.movie-card {
+  width: 100%;
+  max-width: 350px;  /* Or whatever looks good */
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.movie-card:hover {
+  transform: scale(1.05);
+}
+

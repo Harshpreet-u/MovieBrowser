@@ -11,7 +11,17 @@ export default function Favorites() {
         <h2>Your Favorite Movies</h2>
         <div className="movies-grid">
           {favorites.map((movie) => (
-            <MovieCard movie={movie} key={movie.id} />
+            <div>
+                  <Link
+                    to={"/Home/" + movie.id}
+                    state={{movie}}
+                    key={movie.id}
+                    className="-card-link"
+                  >
+                    <MovieCard movie={movie} key={movie.id} />
+                  </Link>
+                </div>
+            // <MovieCard movie={movie} key={movie.id} />
           ))}
         </div>
       </div>

@@ -16,3 +16,20 @@ export const searchMovies = async (query) => {
   const data = await response.json();
   return data.results;
 };
+
+export const GenreMapping = async () => {
+  // const response = await fetch(`${BASE_URL}/genre/movie/list?api_key=${API_KEY}&language=en-US`);
+  const response = await fetch(`${BASE_URL}/genre/movie/list?api_key=${API_KEY}&language=en-US`);
+  const data = await response.json();
+  //console.log("genre data ", data.genres);
+  return data.genres;
+}
+
+export const getGenreNames = (genreIds, genreList) => {
+  // console.log("genreIds:", genreIds);
+  // console.log("genreMap inside getGenreNames:", genreList);
+  const genreMap = {};
+  genreList.forEach((g) => (genreMap[g.id] = g.name));
+
+  return genreIds.map((id) => genreMap[id] || "no genre");
+};

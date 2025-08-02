@@ -1,26 +1,103 @@
+import { useEffect, useState } from "react";
 import { useParams, useLocation, Link } from "react-router-dom";
+
 import "../css/MovieDetails.css";
+
+import { useMovieContext } from "../contexts/MovieCContext";
+import { useWatchLaterContext } from "../contexts/WatchLaterContext";
+import { useWatchListContext } from "../contexts/WatchListContext";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as farHeart } from "@fortawesome/free-regular-svg-icons";
-// import { faPlay as farPlay } from "@fortawesome/free-regular-svg-icons";
 import { faList, faPlay, faClock } from "@fortawesome/free-solid-svg-icons";
 
+import { getGenreNames, GenreMapping } from "../services/api";
+import GenrePage from "./GenrePage";
+
 export default function MovieDetails() {
+
   const { id } = useParams();
-  console.log("Navigated to MovieDetails with ID:", id);
-  const { state } = useLocation(); // access the passed movie object
+  //console.log("Navigated to MovieDetails with ID:", id);
+
+  const { state } = useLocation();
 
   const movie = state?.movie;
+  const initialGenreMap = state?.genreMap;
+
+  const { addToFavorites, removeFromFavorites, isFavorite } = useMovieContext();
+  const favorite = isFavorite(movie.id);
+  //const { favorites } = useMovieContext();
+  //console.log("favs = ", favorites);
+
+  const { addWatchLater, removeWatchLater, isWatchLater } =
+    useWatchLaterContext();
+  const WLater = isWatchLater(movie.id);
+  //const { watchLater } = useWatchLaterContext();
+  //console.log("Wlaters = ", watchLater);
+
+  const { addToWatchList, removeFromWatchList, isWatchList } =
+    useWatchListContext();
+  const WList = isWatchList(movie.id);
+  //const { watchList } = useWatchListContext();
+  //console.log("Wlists = ", watchList);
+
+  const [genreMap, setGenreMap] = useState(initialGenreMap || []);
+  const [genreNames, setGenreNames] = useState([]);
+
+  // const genreNames = getGenreNames(movie.genre_ids, genreMap);
+  //console.log("MovieDetails props:", movie, genreMap);
+
+  function onFavClick() {
+    if (favorite) removeFromFavorites(movie.id);
+    else addToFavorites(movie);
+  }
+
+  function onWListClick(e) {
+    e.preventDefault();
+    if (WList) removeFromWatchList(movie.id);
+    else {
+      addToWatchList(movie);
+      //console.log("Adding movie to watchList:", movie);
+    }
+  }
+
+  function onWLaterClick(e) {
+    e.preventDefault();
+    if (WLater) removeWatchLater(movie.id);
+    else {
+      addWatchLater(movie);
+      //console.log("Adding movie to watchList:", movie);
+    }
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("clicked button");
+    //console.log("clicked button");
   };
+
+  useEffect(() => {
+    const fetchGenres = async () => {
+      if (!initialGenreMap) {
+        const fetchedGenres = await GenreMapping();
+        setGenreMap(fetchedGenres);
+      }
+    };
+    fetchGenres();
+  }, []);
+
+  useEffect(() => {
+    if (movie && genreMap.length > 0) {
+      const names = getGenreNames(movie.genre_ids, genreMap);
+      setGenreNames(names);
+    }
+  }, [genreMap, movie]);
+
+  if (!movie) {
+    return <h2>Movie not found</h2>;
+  }
 
   return (
     <div>
-      <h1>The details of the movie will be displayed here</h1>
-      <p>Movie ID: {id}</p>
       <div className="movie-field">
         <div className="movie-img">
           <img
@@ -30,37 +107,70 @@ export default function MovieDetails() {
           />
         </div>
         <div className="movie-details">
-          <h2 className="movie-title-centre">{movie.title}</h2>
+          <h3 className="movie-title-centre">
+            {movie.title}{" "}
+            <span className="movie-header-date">
+              ({movie.release_date?.split("-")[0]})
+            </span>
+          </h3>
+          <div style={{ display: "inline" }}>
+          <span className="movie-safe">
+            {movie.adult === true ? <p>18+(R)</p> : <p>13+(G)</p>}&nbsp;
+          </span>
+          <span>({movie.release_date}) &nbsp;</span>
+          <span className="movie-genres">
+            {genreNames.map((name, idx) => (
+              <span key={idx}>
+                <Link
+                  to={`/Genre/${name}`}
+                  state={{ movie, genreNames }}
+                  key={idx}
+                  className="genre-tag"
+                >
+                  {name} ,
+                  {/* <GenrePage
+                      movie={movie}
+                      key={movie.id}
+                      genreMap={genreMap}
+                    /> */}
+                </Link>
+                {/* <a href="#">
+                    
+                  </a>{" "}
+                  , */}
+              </span>
+            ))}
+          </span>
+          </div>
           <form onSubmit={handleSubmit}>
             <div className="movie-icons">
-              <button className="movie-add-to-wl icons">
+              <button onClick={onWListClick} className={`movie-favs icons watchList-btn ${WList ? "active" : ""}`}>
                 <FontAwesomeIcon icon={faList} />
               </button>
-              <button className="movie-favs icons">
+              <button onClick={onFavClick} className={`movie-favs icons favourite-btn ${favorite ? "active" : ""}`}>
                 <FontAwesomeIcon icon={farHeart} />
               </button>
-              <button className="movie-watch icons">
+              <button onClick={onWLaterClick} className={`movie-favs icons watchLater-btn ${WLater ? "active" : ""}`}>
                 <FontAwesomeIcon icon={faClock} />
               </button>
               <button className="movie-trailer">
                 <FontAwesomeIcon icon={faPlay} />
-                Play Trailer
+                <Link style={{color:"white"}} to={`https://www.youtube.com/results?search_query=${movie.title}`}>Play Trailer</Link>
               </button>
             </div>
           </form>
-          <br />
-          <p>
+          <p style={{ opacity: 0.8 }}>
             <i>Random Quote</i>
           </p>
-          <br />
-          <p className="movie-des">Movie Description : {movie.overview}</p>
+          <p className="movie-overview">Overview</p>
+          <p className="movie-des">{movie.overview}</p>
           <div className="movie-score">
-            <p className="movie-popularity">{movie.popularity?.toString().split(".")[0]}K users liked this movie</p>
+            <p className="movie-popularity">
+              {movie.popularity?.toString().split(".")[0]}K users liked this
+              movie
+            </p>
             <p className="movie-score">Score : {movie.vote_average}</p>
             <p className="movie-votes">Votes : {movie.vote_count}</p>
-            <div className="movie-safe">
-              {movie.adult === true ? <p>18+(R)</p> : <p>13+(G)</p>}
-            </div>
           </div>
           {/* Add reviews 
           Add genres and recommendations from similar genre */}

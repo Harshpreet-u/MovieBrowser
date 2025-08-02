@@ -173,6 +173,8 @@ p {
   font-size: 1rem;
   margin-top: 1.5rem;
   color: #cccccc;
+  margin-top: 0.25rem;
+  opacity: 0.9;
 }
 
 /* === Score and Popularity === */
@@ -224,4 +226,28 @@ p {
     height: auto;
     width: 90vw;
   }
+}
+
+.movie-overview {
+  font-size: 1.4rem;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.movie-header-date {
+  opacity: 0.8;
+}
+
+.genre-tag {
+  text-decoration: none;
+  color: white;
+}
+
+.genre-tag:hover {
+  color: #e0e0e0;
+  opacity: 0.7;
+}
+
+.active {
+  color: red;
 }

@@ -4,23 +4,33 @@ import Home from "./pages/Home";
 import NavBar from "./components/NavBar";
 import Favorites from "./pages/Favourites";
 import { Routes, Route } from "react-router-dom";
+import { WatchLaterProvider } from "./contexts/WatchLaterContext";
+import { WatchListProvider } from "./contexts/WatchListContext";
 import { MovieProvider } from "./contexts/MovieCContext";
 import MovieDetails from "./pages/MovieDetails";
-// import { faHeart as farHeart } from "@fortawesome/free-regular-svg-icons";
-// import { faList, faClock } from "@fortawesome/free-solid-svg-icons";
+import GenrePage from "./pages/GenrePage";
+import WatchLater from "./pages/WatchLater";
+import WatchList from "./pages/WatchList";
 
 function App() {
   return (
-    <MovieProvider>
-      <NavBar />
-      <main className="main-content">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/Home/:id" element={<MovieDetails />} />
-          <Route path="/favorites" element={<Favorites />} />
-        </Routes>
-      </main>
-    </MovieProvider>
+    <WatchListProvider>
+      <WatchLaterProvider>
+        <MovieProvider>
+          <NavBar />
+          <main className="main-content">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/Home/:id" element={<MovieDetails />} />
+              <Route path="/favorites" element={<Favorites />} />
+              <Route path="/Genre/:genreName" element={<GenrePage />}></Route>
+              <Route path="/watchLater" element={<WatchLater />} />
+              <Route path="/watchList" element={<WatchList />} />
+            </Routes>
+          </main>
+        </MovieProvider>
+      </WatchLaterProvider>
+    </WatchListProvider>
   );
 }
 

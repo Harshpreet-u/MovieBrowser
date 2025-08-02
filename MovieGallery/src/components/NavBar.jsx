@@ -9,6 +9,8 @@ export default function NavBar() {
       </div>
       <div className="navbar-links">
         <Link to="/" className="nav-link">Home</Link>
+        <Link to="/watchList" className="nav-link">WatchList</Link>
+        <Link to="/watchLater" className="nav-link">WatchLater</Link>
         <Link to="/favorites" className="nav-link">Favourites</Link>
       </div>
     </div>

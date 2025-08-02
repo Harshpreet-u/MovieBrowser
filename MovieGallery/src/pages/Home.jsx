@@ -1,7 +1,11 @@
 import MovieCard from "../components/MovieCard";
 import { useState, useEffect } from "react";
 import "../css/Home.css";
-import { searchMovies, getPopularMovies } from "../services/api.js";
+import {
+  searchMovies,
+  getPopularMovies,
+  GenreMapping,
+} from "../services/api.js";
 import { Link } from "react-router-dom";
 
 export default function Home() {
@@ -9,6 +13,23 @@ export default function Home() {
   const [movies, setMovies] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [genreMap, setGenreMap] = useState({});
+
+  useEffect(() => {
+    const getGenreByMovies = async () => {
+      try {
+        const getGenre = await GenreMapping();
+        //console.log("Fetched genreMap:", getGenre);
+        setGenreMap(getGenre);
+      } catch (err) {
+        console.log(err);
+        setError("Failed to load movies...");
+      } finally {
+        setLoading(false);
+      }
+    };
+    getGenreByMovies();
+  }, []);
 
   useEffect(() => {
     const loadPopularMovies = async () => {
@@ -71,14 +92,17 @@ export default function Home() {
           {movies.map(
             (movie) =>
               movie.title.toLowerCase().startsWith(searchQuery) && (
-                <div className="movie-card">
+                <div className="movie-card" key={movie.id}>
                   <Link
                     to={"/Home/" + movie.id}
-                    state={{movie}} // Pass additional data
-                    key={movie.id}
+                    state={{ movie, genreMap  }} // Pass additional data
                     className="movie-card-link"
                   >
-                    <MovieCard movie={movie} key={movie.id} />
+                    <MovieCard
+                      movie={movie}
+                      key={movie.id}
+                      genreMap={genreMap}
+                    />
                   </Link>
                 </div>
               )

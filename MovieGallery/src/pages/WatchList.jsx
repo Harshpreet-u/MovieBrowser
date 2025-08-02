@@ -1,18 +1,18 @@
 import "../css/Favorites.css";
 import { Link } from "react-router-dom";
-import { useMovieContext } from "../contexts/MovieCContext";
+import { useWatchListContext } from "../contexts/WatchListContext";
 import MovieCard from "../components/MovieCard";
 
 export default function Favorites() {
-  const { favorites } = useMovieContext();
-  //console.log("favs = ", favorites);
+  const { watchList } = useWatchListContext();
+  //console.log("watchList = ", watchList);
 
-  if (favorites) {
+  if (watchList) {
     return (
       <div className="favorites">
-        <h2>Your Favorite Movies</h2>
+        <h2>Your Watch-list Movies</h2>
         <div className="movies-grid">
-          {favorites.map((movie) => (
+          {watchList.map((movie) => (
             <div key={movie.id}>
               <Link
                 to={`/Home/${movie.id}`}
@@ -22,17 +22,21 @@ export default function Favorites() {
                 <MovieCard movie={movie} key={movie.id} />
               </Link>
             </div>
-            // <MovieCard movie={movie} key={movie.id} />
           ))}
         </div>
+        {/* <div className="movies-grid">
+          {watchList.map((movie) => (
+            <MovieCard movie={movie} key={movie.id} />
+          ))}
+        </div> */}
       </div>
     );
   }
 
   return (
-    <div className="favorites-empty">
-      <h2>No favourite movies yet</h2>
-      <p>Start adding movies to your favourites and they will appear here</p>
+    <div className="watchList-empty">
+      <h2>No watchList movies yet</h2>
+      <p>Start adding movies to your watchList and they will appear here</p>
     </div>
   );
 }

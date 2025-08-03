@@ -56,7 +56,7 @@
 .movies-grid {
   display: grid;
   /* grid-template-columns: repeat(auto-fit, minmax((4, 1fr)); */
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(370px, 1fr));
   gap: 1.5rem;
   padding: 1rem;
   width: 100%;
@@ -74,5 +74,21 @@
 
 .movie-card:hover {
   transform: scale(1.05);
+}
+
+.load-more-btn {
+  background-color: #1f80e0;
+  color: white;
+  padding: 10px 20px;
+  margin: 2rem auto;
+  display: block;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.load-more-btn:hover {
+  background-color: #1664b0;
 }
 

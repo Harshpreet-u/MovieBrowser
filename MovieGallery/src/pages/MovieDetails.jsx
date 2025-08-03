@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useLocation, Link } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 
 import "../css/MovieDetails.css";
 
@@ -15,8 +15,7 @@ import { getGenreNames, GenreMapping } from "../services/api";
 import GenrePage from "./GenrePage";
 
 export default function MovieDetails() {
-
-  const { id } = useParams();
+  //const { id } = useParams();
   //console.log("Navigated to MovieDetails with ID:", id);
 
   const { state } = useLocation();
@@ -83,7 +82,7 @@ export default function MovieDetails() {
       }
     };
     fetchGenres();
-  }, []);
+  }, ); // removed [] from here
 
   useEffect(() => {
     if (movie && genreMap.length > 0) {
@@ -114,48 +113,68 @@ export default function MovieDetails() {
             </span>
           </h3>
           <div style={{ display: "inline" }}>
-          <span className="movie-safe">
-            {movie.adult === true ? <p>18+(R)</p> : <p>13+(G)</p>}&nbsp;
-          </span>
-          <span>({movie.release_date}) &nbsp;</span>
-          <span className="movie-genres">
-            {genreNames.map((name, idx) => (
-              <span key={idx}>
-                <Link
-                  to={`/Genre/${name}`}
-                  state={{ movie, genreNames }}
-                  key={idx}
-                  className="genre-tag"
-                >
-                  {name} ,
-                  {/* <GenrePage
+            <span className="movie-safe">
+              {movie.adult === true ? <p>18+(R)</p> : <p>13+(G)</p>}&nbsp;
+            </span>
+            <span>({movie.release_date}) &nbsp;</span>
+            <span className="movie-genres">
+              {genreNames.map((name, idx) => (
+                <span key={idx}>
+                  <Link
+                    to={`/Genre/${name}`}
+                    state={{ movie, genreNames }}
+                    key={idx}
+                    className="genre-tag"
+                  >
+                    {name} ,
+                    {/* <GenrePage
                       movie={movie}
                       key={movie.id}
                       genreMap={genreMap}
                     /> */}
-                </Link>
-                {/* <a href="#">
+                  </Link>
+                  {/* <a href="#">
                     
                   </a>{" "}
                   , */}
-              </span>
-            ))}
-          </span>
+                </span>
+              ))}
+            </span>
           </div>
           <form onSubmit={handleSubmit}>
             <div className="movie-icons">
-              <button onClick={onWListClick} className={`movie-favs icons watchList-btn ${WList ? "active" : ""}`}>
+              <button
+                onClick={onWListClick}
+                className={`movie-favs icons watchList-btn ${
+                  WList ? "active" : ""
+                }`}
+              >
                 <FontAwesomeIcon icon={faList} />
               </button>
-              <button onClick={onFavClick} className={`movie-favs icons favourite-btn ${favorite ? "active" : ""}`}>
+              <button
+                onClick={onFavClick}
+                className={`movie-favs icons favourite-btn ${
+                  favorite ? "active" : ""
+                }`}
+              >
                 <FontAwesomeIcon icon={farHeart} />
               </button>
-              <button onClick={onWLaterClick} className={`movie-favs icons watchLater-btn ${WLater ? "active" : ""}`}>
+              <button
+                onClick={onWLaterClick}
+                className={`movie-favs icons watchLater-btn ${
+                  WLater ? "active" : ""
+                }`}
+              >
                 <FontAwesomeIcon icon={faClock} />
               </button>
               <button className="movie-trailer">
                 <FontAwesomeIcon icon={faPlay} />
-                <Link style={{color:"white"}} to={`https://www.youtube.com/results?search_query=${movie.title}`}>Play Trailer</Link>
+                <Link
+                  style={{ color: "white" }}
+                  to={`https://www.youtube.com/results?search_query=${movie.title}`}
+                >
+                  Play Trailer
+                </Link>
               </button>
             </div>
           </form>

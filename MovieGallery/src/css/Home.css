@@ -55,9 +55,40 @@
 
 .movies-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  /* grid-template-columns: repeat(auto-fit, minmax((4, 1fr)); */
+  grid-template-columns: repeat(auto-fit, minmax(370px, 1fr));
   gap: 1.5rem;
   padding: 1rem;
   width: 100%;
   box-sizing: border-box;
 }
+
+.movie-card {
+  width: 100%;
+  max-width: 350px;  /* Or whatever looks good */
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.movie-card:hover {
+  transform: scale(1.05);
+}
+
+.load-more-btn {
+  background-color: #1f80e0;
+  color: white;
+  padding: 10px 20px;
+  margin: 2rem auto;
+  display: block;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.load-more-btn:hover {
+  background-color: #1664b0;
+}
+

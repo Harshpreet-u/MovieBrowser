@@ -97,7 +97,7 @@ function App() {
           <main className="main-content">
             <Routes>
               {/* Home is public now */}
-              <Route path="/" element={<Home isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />} />
+              <Route path="/Home" element={<Home isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />} />
 
               {/* Movie details public */}
               <Route path="/Home/:id" element={<MovieDetails />} />

@@ -1,7 +1,4 @@
-const API_KEY = "6660159448f862bc40e600fa9f9d874f";
 const BASE_URL = "https://api.themoviedb.org/3";
-
-console.log("api key= ", API_KEY);
 
 export const getPopularMovies = async () => {
   const response = await fetch(`${BASE_URL}/discover/movie?api_key=${API_KEY}`);
@@ -15,7 +12,7 @@ export const searchMovies = async (query) => {
       query
     )}&language=en-US`
   );
-   if (!response.ok) {
+  if (!response.ok) {
     console.log("Failed to fetch search results");
   }
   const data = await response.json();
@@ -108,71 +105,4 @@ export const fetchGenreByPage = async (page = 1, genreName) => {
   }
 };
 
-// const API_BASE = "http://localhost:8080/api/lists";
-
-// // GET lists
-// export async function getLists(token) {
-//   const res = await fetch(API_BASE, {
-//     headers: { Authorization: `Bearer ${token}` }
-//   });
-//   return res.json();
-// }
-
-// // ADD to list
-// export async function addToList(listType, movieId, token) {
-//   await fetch(`${API_BASE}/${listType}`, {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//       Authorization: `Bearer ${token}`
-//     },
-//     body: JSON.stringify({ movieId })
-//   });
-// }
-
-// // REMOVE from list
-// export async function removeFromList(listType, movieId, token) {
-//   await fetch(`${API_BASE}/${listType}/${movieId}`, {
-//     method: "DELETE",
-//     headers: { Authorization: `Bearer ${token}` }
-//   });
-// }
-
-// const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
-
-// function getToken() {
-//   return localStorage.getItem('token');
-// }
-
-// async function request(url, method = 'GET', body) {
-//   const res = await fetch(`${API_URL}${url}`, {
-//     method,
-//     headers: {
-//       'Content-Type': 'application/json',
-//       'Authorization': `Bearer ${getToken()}`
-//     },
-//     body: body ? JSON.stringify(body) : undefined
-//   });
-
-//   if (!res.ok) {
-//     // const text = await res.text();
-//     // throw new Error(text || res.statusText);
-//     console.log("error");
-//   }
-//   return res.json();
-// }
-
-// // Lists API
-// export const getUserLists = () => request('/lists');
-
-// export const addToList = (listType, movieId) =>
-//   request(`/lists/${listType}`, 'POST', { movieId });
-
-// export const removeFromList = (listType, movieId) =>
-//   request(`/lists/${listType}/${movieId}`, 'DELETE');
-
-// export default {
-//   getUserLists,
-//   addToList,
-//   removeFromList
-// };
+const API_KEY = "6660159448f862bc40e600fa9f9d874f";

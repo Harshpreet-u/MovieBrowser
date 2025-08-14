@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const AuthRouter = require('./Routes/AuthRouter');
+const axios = require("axios");
 //const userListRoutes = require('./Routes/UserList');
 
 require('dotenv').config();
@@ -20,9 +21,8 @@ app.use(cors({ origin: '*' }));
 //app.use('/api/lists', require('./Routes/UserList'));
 app.use('/auth', AuthRouter);
 
-app.get("/api/get-key", (req, res) => {
-  res.json({ apiKey: process.env.API_KEY });
-});
+const BASE_URL = "https://api.themoviedb.org/3";
+const API_KEY = process.env.API_KEY;
 
 app.get("/ping", (req,res) => {
     res.send("here at ping");

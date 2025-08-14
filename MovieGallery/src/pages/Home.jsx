@@ -9,8 +9,11 @@ import {
 } from "../services/api.js";
 import { Link } from "react-router-dom";
 import { useRef } from "react";
+//import { useNavigate } from "react-router-dom";
+//import { handleSuccess } from "../../utils";
+import { ToastContainer } from "react-toastify";
 
-export default function Home() {
+export default function Home({ isAuthenticated, setIsAuthenticated }) {
   const scrollYRef = useRef(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [movies, setMovies] = useState([]);
@@ -19,6 +22,8 @@ export default function Home() {
   const [genreMap, setGenreMap] = useState({});
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [LoggedInUser, setLoggedInUser] = useState("");
+  //const navigate = useNavigate();
 
   useEffect(() => {
     const loadInitialMovies = async () => {
@@ -61,7 +66,7 @@ export default function Home() {
   useLayoutEffect(() => {
     if (scrollYRef.current) {
       window.scrollTo({ top: scrollYRef.current, behavior: "auto" });
-      scrollYRef.current = 0; // Reset it
+      scrollYRef.current = 0;
     }
   }, [movies]);
 
@@ -97,34 +102,47 @@ export default function Home() {
     loadPopularMovies();
   }, []);
 
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    console.log(movies);
-
+  useEffect(() => {
     if (!searchQuery.trim()) return;
-    if (loading) return;
 
+    const delayDebounce = setTimeout(() => {
+      fetchSearchResults(searchQuery);
+    }, 500);
+
+    return () => clearTimeout(delayDebounce);
+  }, [searchQuery]);
+
+  const fetchSearchResults = async (query) => {
     setLoading(true);
+
     try {
-      const searchResults = await searchMovies(searchQuery);
+      const searchResults = await searchMovies(query);
       setMovies(searchResults);
-      setError(null);
+      setError(false);
     } catch (err) {
       console.log(err);
       setError("Failed to search movies...");
     } finally {
       setLoading(false);
     }
-    // setSearchQuery("");
   };
 
-  // const preventDef = (e) => {
-  //   e.preventDefault();
+  useEffect(() => {
+    setLoggedInUser(localStorage.getItem("LoggedInUser"));
+  }, []);
+
+  // const handleLogout = async () => {
+  //   localStorage.removeItem("Token");
+  //   localStorage.removeItem("LoggedInUser");
+  //   handleSuccess("User Logged out");
+  //   setTimeout(() => {
+  //     navigate('/login');
+  //   }, 1000);
   // };
 
   return (
     <div className="home">
-      <form onSubmit={handleSearch} className="search-form">
+      <form onSubmit={(e) => e.preventDefault()} className="search-form">
         <input
           type="text"
           placeholder="Search for movies"
@@ -156,6 +174,8 @@ export default function Home() {
                       movie={movie}
                       key={movie.id}
                       genreMap={genreMap}
+                      isAuthenticated={isAuthenticated}
+                      setIsAuthenticated={setIsAuthenticated}
                     />
                   </Link>
                 </div>
@@ -174,6 +194,7 @@ export default function Home() {
         </button>
       )}
       {!hasMore && <p>No more movies to load!</p>}
+      <ToastContainer />
     </div>
   );
 }

@@ -9,7 +9,7 @@ export default function Favorites() {
 
   if (watchLater) {
     return (
-      <div className="watchLater">
+      <div className="favorites">
         <h2>Your Watch Later Movies</h2>
         <div className="movies-grid">
           {watchLater.map((movie) => (

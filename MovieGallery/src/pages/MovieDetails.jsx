@@ -14,6 +14,8 @@ import { faList, faPlay, faClock } from "@fortawesome/free-solid-svg-icons";
 import { getGenreNames, GenreMapping } from "../services/api";
 import GenrePage from "./GenrePage";
 
+// public/assets/JustWatch.png;
+
 export default function MovieDetails() {
   //const { id } = useParams();
   //console.log("Navigated to MovieDetails with ID:", id);
@@ -45,6 +47,15 @@ export default function MovieDetails() {
 
   // const genreNames = getGenreNames(movie.genre_ids, genreMap);
   //console.log("MovieDetails props:", movie, genreMap);
+
+  function slugify(title) {
+    return title
+      .toLowerCase()
+      .replace(/&/g, "and") // Replace & with "and"
+      .replace(/[^a-z0-9]+/g, "-") // Replace non-alphanumerics (including .) with hyphen
+      .replace(/^-+|-+$/g, "") // Trim leading/trailing hyphens
+      .replace(/--+/g, "-"); // Replace multiple hyphens with a single one
+  }
 
   function onFavClick() {
     if (favorite) removeFromFavorites(movie.id);
@@ -82,7 +93,7 @@ export default function MovieDetails() {
       }
     };
     fetchGenres();
-  }, ); // removed [] from here
+  }); // removed [] from here
 
   useEffect(() => {
     if (movie && genreMap.length > 0) {
@@ -171,9 +182,25 @@ export default function MovieDetails() {
                 <FontAwesomeIcon icon={faPlay} />
                 <Link
                   style={{ color: "white" }}
-                  to={`https://www.youtube.com/results?search_query=${movie.title}`}
+                  to={`https://www.youtube.com/results?search_query=${slugify(
+                    movie.title
+                  )}`}
                 >
                   Play Trailer
+                </Link>
+              </button>
+              <button className="movie-favs icons">
+                <Link
+                  style={{ color: "white" }}
+                  to={`https://www.justwatch.com/in/movie/${slugify(
+                    movie.title
+                  )}`}
+                >
+                  <img
+                    src="/assets/JustWatch.png"
+                    alt="JustWatch"
+                    style={{ width: "20pxpx", height: "20px" }}
+                  />
                 </Link>
               </button>
             </div>
@@ -182,7 +209,7 @@ export default function MovieDetails() {
             <i>Random Quote</i>
           </p>
           <p className="movie-overview">Overview</p>
-          <p className="movie-des">{movie.overview}</p>
+          <p className="movie-des">{movie.overview.split(".")[0]}</p>
           <div className="movie-score">
             <p className="movie-popularity">
               {movie.popularity?.toString().split(".")[0]}K users liked this
@@ -198,3 +225,13 @@ export default function MovieDetails() {
     </div>
   );
 }
+
+// more features to add :
+// create user  along with user DB
+// link watch list, watch later and favourties to each account 
+
+// Advanced features :
+// segregate movies and tv-shows seperatelt
+// make a trending and whats popular section for both which is scrollable-x and on the end of the scroll we are redirected to the page to see more of the treding
+// create comments and staring system 
+// create the cast list for each movie

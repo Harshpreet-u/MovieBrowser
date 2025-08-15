@@ -30,14 +30,11 @@ export const GenreMapping = async () => {
   return data.genres;
 };
 
-export const getGenreNames = (genreIds, genreList) => {
-  // console.log("genreIds:", genreIds);
-  // console.log("genreMap inside getGenreNames:", genreList);
-  const genreMap = {};
-  genreList.forEach((g) => (genreMap[g.id] = g.name));
-
-  return genreIds.map((id) => genreMap[id] || "no genre");
+// api.js
+export const getGenreNames = (genreIds, genreMap) => {
+  return genreIds.map((id) => genreMap[id] || "Unknown");
 };
+
 
 export async function fetchMoviesByGenreName(genreName) {
   try {
@@ -106,3 +103,50 @@ export const fetchGenreByPage = async (page = 1, genreName) => {
 };
 
 const API_KEY = "6660159448f862bc40e600fa9f9d874f";
+
+
+const API_BASE = "http://localhost:8080/api/movies";
+
+// export const getPopularMovies = async () => {
+//   const res = await fetch(`${API_BASE}/popular`);
+//   //console.log(res);
+//   if (!res.ok) throw new Error("Failed to fetch popular movies");
+//   const movies = res.json();
+//   return movies || [];
+// };
+
+// export const searchMovies = async (query) => {
+//   const res = await fetch(`${API_BASE}/search?query=${encodeURIComponent(query)}`);
+//   if (!res.ok) throw new Error("Failed to search movies");
+//   const movies = await res.json();
+//   //console.log(movies);
+//   return movies;
+// };
+
+// // ✅ Get movies by genre name
+// export const fetchMoviesByGenreName = async (genreName) => {
+//   const res = await fetch(`${API_BASE}/genre/${encodeURIComponent(genreName)}`);
+//   if (!res.ok) throw new Error("Failed to fetch movies by genre");
+//   return res.json();
+// };
+
+// // ✅ Get all genres
+// export const getGenres = async () => {
+//   const res = await fetch(`${API_BASE}/genres`);
+//   if (!res.ok) throw new Error("Failed to fetch genres");
+//   return res.json(); // returns an array of { id, name }
+// };
+
+// // ✅ Map genre IDs to names (client-side)
+// export const getGenreNames = (genreIds, genreList) => {
+//   const genreMap = {};
+//   genreList.forEach((g) => (genreMap[g.id] = g.name));
+//   return genreIds.map((id) => genreMap[id] || "no genre");
+// };
+
+// // ✅ Get movies by genre ID
+// export const getMoviesByGenre = async (genreId) => {
+//   const res = await fetch(`${API_BASE}/by-genre/${genreId}`);
+//   if (!res.ok) throw new Error("Failed to fetch movies by genre ID");
+//   return res.json();
+// };

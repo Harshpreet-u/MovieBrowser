@@ -70,21 +70,45 @@ export default function Home({ isAuthenticated, setIsAuthenticated }) {
     }
   }, [movies]);
 
-  useEffect(() => {
-    const getGenreByMovies = async () => {
-      try {
-        const getGenre = await GenreMapping();
-        //console.log("Fetched genreMap:", getGenre);
-        setGenreMap(getGenre);
-      } catch (err) {
-        console.log(err);
-        setError("Failed to load movies...");
-      } finally {
-        setLoading(false);
-      }
-    };
-    getGenreByMovies();
-  }, []);
+  // useEffect(() => {
+  //   const getGenreByMovies = async () => {
+  //     try {
+  //       const getGenre = await GenreMapping();
+  //       //console.log("Fetched genreMap:", getGenre);
+  //       setGenreMap(getGenre);
+  //     } catch (err) {
+  //       console.log(err);
+  //       setError("Failed to load movies...");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   getGenreByMovies();
+  // }, []);
+
+useEffect(() => {
+  const fetchGenres = async () => {
+    try {
+      const list = await GenreMapping(); // [{id: 28, name: "Action"}, ...]
+      
+      // Convert array into object map
+      const map = {};
+      list.forEach(g => {
+        map[g.id] = g.name;
+      });
+      
+      setGenreMap(map);
+    } catch (err) {
+      console.error(err);
+      setError("Failed to load genres");
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  fetchGenres();
+}, []);
+
 
   useEffect(() => {
     const loadPopularMovies = async () => {
@@ -198,3 +222,4 @@ export default function Home({ isAuthenticated, setIsAuthenticated }) {
     </div>
   );
 }
+  
